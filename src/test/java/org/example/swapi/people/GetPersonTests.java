@@ -16,7 +16,7 @@ public class GetPersonTests {
 
 	@Test
 	public void testGetSingleById() {
-		Result<Person> result = new PersonApi().getPerson("1");
+		Result<Person> result = new PersonApi().getById("1");
 		Assert.assertEquals(result.getUid(), "1");
 		Assert.assertEquals(result.getDescription(), "A person within the Star Wars universe");
 		Person person = result.getProperties();
@@ -43,7 +43,7 @@ public class GetPersonTests {
 
 	@Test(dataProvider = "InvalidIdScenarios")
 	public void testGetUsingInvalidId(String id) {
-		Response response = new PersonApi().tryGetPerson(id)
+		Response response = new PersonApi().tryGetById(id)
 				.then().statusCode(404)
 				.extract()
 				.response();

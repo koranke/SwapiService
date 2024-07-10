@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class GetPeopleTests {
 	@Test
 	public void testBasicGetAll() {
-		Response response = new PersonApi().tryGetPeople()
+		Response response = new PersonApi().tryGetAll()
 				.then().statusCode(200)
 				.extract()
 				.response();
@@ -38,7 +38,7 @@ public class GetPeopleTests {
 	public void testGetAllWithLimit() {
 		Response response = new PersonApi()
 				.withQueryParameter("limit", "20")
-				.tryGetPeople()
+				.tryGetAll()
 				.then().statusCode(200)
 				.extract()
 				.response();
@@ -51,7 +51,7 @@ public class GetPeopleTests {
 	@Test
 	public void testSecondPage() {
 		PaginatedResponse paginatedResponse = new PersonApi()
-				.tryGetPeople()
+				.tryGetAll()
 				.then().extract()
 				.response().as(PaginatedResponse.class);
 
@@ -60,7 +60,7 @@ public class GetPeopleTests {
 		Response response = new PersonApi()
 				.withQueryParameter("limit", "10")
 				.withQueryParameter("page", "2")
-				.tryGetPeople()
+				.tryGetAll()
 				.then().statusCode(200)
 				.extract()
 				.response();
@@ -80,7 +80,7 @@ public class GetPeopleTests {
 		Response response = new PersonApi()
 				.withQueryParameter("limit", "5")
 				.withQueryParameter("page", "2")
-				.tryGetPeople()
+				.tryGetAll()
 				.then().statusCode(200)
 				.extract()
 				.response();
@@ -95,7 +95,7 @@ public class GetPeopleTests {
 	@Test
 	public void testGetLastPage() {
 		PaginatedResponse paginatedResponse = new PersonApi()
-				.tryGetPeople()
+				.tryGetAll()
 				.then().extract()
 				.response().as(PaginatedResponse.class);
 
@@ -106,7 +106,7 @@ public class GetPeopleTests {
 		Response response = new PersonApi()
 				.withQueryParameter("limit", "10")
 				.withQueryParameter("page", lastPage)
-				.tryGetPeople()
+				.tryGetAll()
 				.then().statusCode(200)
 				.extract()
 				.response();
@@ -125,7 +125,7 @@ public class GetPeopleTests {
 	@Test
 	public void testGetByName() {
 		String searchName = "Luke Skywalker";
-		List<Result<Person>> people = new PersonApi().getPeople(searchName);
+		List<Result<Person>> people = new PersonApi().getFiltered("name", searchName);
 		Assert.assertEquals(people.size(), 1);
 		Assert.assertEquals(people.get(0).getProperties().getName(), searchName);
 		Assert.assertEquals(people.get(0).getUid(), "1");
@@ -136,14 +136,14 @@ public class GetPeopleTests {
 
 	@Test
 	public void testGetByNameNoMatch() {
-		List<Result<Person>> people = new PersonApi().getPeople("The Hulk");
+		List<Result<Person>> people = new PersonApi().getFiltered("name", "The Hulk");
 		Assert.assertEquals(people.size(), 0);
 	}
 
 	@Test
 	public void testGetByNameWithMultiple() {
 		String searchName = "Skywalker";
-		List<Result<Person>> people = new PersonApi().getPeople(searchName);
+		List<Result<Person>> people = new PersonApi().getFiltered("name", searchName);
 		Assert.assertTrue(people.size() > 1);
 		for (Result<Person> person : people) {
 			Assert.assertTrue(person.getProperties().getName().contains(searchName));

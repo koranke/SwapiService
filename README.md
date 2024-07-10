@@ -33,8 +33,3 @@ In a real situation, we would have test logging for debugging and would also
 have a configuration solution so that tests can run in multiple environments.
 We might also have custom reporting and integration with a test management
 solution like JIRA.
-
-## Other thoughts
-After working on this, I realized that I should have used a more central approach.  That is, the helper methods
-for all the different endpoint groups are largely the same, where the only different is in the returned data entity.  If
-this were a real project, I would refactor this to reduce code duplication.
