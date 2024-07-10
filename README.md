@@ -14,6 +14,11 @@ and extend that for individual endpoint groups.  Each individual endpoint group 
 can then implement its own helper methods as desired, depending on the needs
 of testing.
 
+In this case, since all the endpoints follow the same pattern except for the handled data entity, we can further reduce
+code duplication by using a generic swapi base class also.  This class can be used to handle the common
+functionality of the swapi endpoints.  If there were different endpoints with more varied response objects, we
+would just extend from the ApiBase class instead.
+
 Tests typically have two different needs when calling an API. They can either
 be calling an API to test it or they can be calling it to assist with
 scenario setup or data verification.  If a test is testing the endpoint, then it
