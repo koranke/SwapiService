@@ -1,7 +1,7 @@
 package org.example.swapi.people;
 
 import io.restassured.response.Response;
-import org.example.api.PersonApi;
+import org.example.api.Swapi;
 import org.example.domain.Message;
 import org.example.domain.Person;
 import org.example.domain.Result;
@@ -16,7 +16,7 @@ public class GetPersonTests {
 
 	@Test
 	public void testGetSingleById() {
-		Result<Person> result = new PersonApi().getById("1");
+		Result<Person> result = Swapi.people().getById("1");
 		Assert.assertEquals(result.getUid(), "1");
 		Assert.assertEquals(result.getDescription(), "A person within the Star Wars universe");
 		Person person = result.getProperties();
@@ -43,7 +43,7 @@ public class GetPersonTests {
 
 	@Test(dataProvider = "InvalidIdScenarios")
 	public void testGetUsingInvalidId(String id) {
-		Response response = new PersonApi().tryGetById(id)
+		Response response = Swapi.people().tryGetById(id)
 				.then().statusCode(404)
 				.extract()
 				.response();

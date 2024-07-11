@@ -1,7 +1,7 @@
 package org.example.swapi.people;
 
 import io.restassured.response.Response;
-import org.example.api.PersonApi;
+import org.example.api.Swapi;
 import org.example.core.Constants;
 import org.example.domain.ItemLink;
 import org.example.domain.PaginatedResponse;
@@ -15,9 +15,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class GetPeopleTests {
+
 	@Test
 	public void testBasicGetAll() {
-		Response response = new PersonApi().tryGetAll()
+		Response response = Swapi.people().tryGetAll()
 				.then().statusCode(200)
 				.extract()
 				.response();
@@ -36,7 +37,7 @@ public class GetPeopleTests {
 	 */
 	@Test(enabled = false)
 	public void testGetAllWithLimit() {
-		Response response = new PersonApi()
+		Response response = Swapi.people()
 				.withQueryParameter("limit", "20")
 				.tryGetAll()
 				.then().statusCode(200)
@@ -50,14 +51,14 @@ public class GetPeopleTests {
 
 	@Test
 	public void testSecondPage() {
-		PaginatedResponse paginatedResponse = new PersonApi()
+		PaginatedResponse paginatedResponse = Swapi.people()
 				.tryGetAll()
 				.then().extract()
 				.response().as(PaginatedResponse.class);
 
 		Set<String> pageOneIds = paginatedResponse.getResults().stream().map(ItemLink::getUid).collect(Collectors.toSet());
 
-		Response response = new PersonApi()
+		Response response = Swapi.people()
 				.withQueryParameter("limit", "10")
 				.withQueryParameter("page", "2")
 				.tryGetAll()
@@ -77,7 +78,7 @@ public class GetPeopleTests {
 
 	@Test
 	public void testGetAllWithCustomPageAndLimit() {
-		Response response = new PersonApi()
+		Response response = Swapi.people()
 				.withQueryParameter("limit", "5")
 				.withQueryParameter("page", "2")
 				.tryGetAll()
@@ -94,7 +95,7 @@ public class GetPeopleTests {
 
 	@Test
 	public void testGetLastPage() {
-		PaginatedResponse paginatedResponse = new PersonApi()
+		PaginatedResponse paginatedResponse = Swapi.people()
 				.tryGetAll()
 				.then().extract()
 				.response().as(PaginatedResponse.class);
@@ -103,7 +104,7 @@ public class GetPeopleTests {
 		String priorPage = String.valueOf(paginatedResponse.getTotalPages() - 1);
 		Set<String> pageOneIds = paginatedResponse.getResults().stream().map(ItemLink::getUid).collect(Collectors.toSet());
 
-		Response response = new PersonApi()
+		Response response = Swapi.people()
 				.withQueryParameter("limit", "10")
 				.withQueryParameter("page", lastPage)
 				.tryGetAll()
@@ -125,7 +126,7 @@ public class GetPeopleTests {
 	@Test
 	public void testGetByName() {
 		String searchName = "Luke Skywalker";
-		List<Result<Person>> people = new PersonApi().getFiltered("name", searchName);
+		List<Result<Person>> people = Swapi.people().getFiltered("name", searchName);
 		Assert.assertEquals(people.size(), 1);
 		Assert.assertEquals(people.get(0).getProperties().getName(), searchName);
 		Assert.assertEquals(people.get(0).getUid(), "1");
@@ -136,14 +137,14 @@ public class GetPeopleTests {
 
 	@Test
 	public void testGetByNameNoMatch() {
-		List<Result<Person>> people = new PersonApi().getFiltered("name", "The Hulk");
+		List<Result<Person>> people = Swapi.people().getFiltered("name", "The Hulk");
 		Assert.assertEquals(people.size(), 0);
 	}
 
 	@Test
 	public void testGetByNameWithMultiple() {
 		String searchName = "Skywalker";
-		List<Result<Person>> people = new PersonApi().getFiltered("name", searchName);
+		List<Result<Person>> people = Swapi.people().getFiltered("name", searchName);
 		Assert.assertTrue(people.size() > 1);
 		for (Result<Person> person : people) {
 			Assert.assertTrue(person.getProperties().getName().contains(searchName));
