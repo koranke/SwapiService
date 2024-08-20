@@ -1,5 +1,7 @@
 # STAR WARS API TEST PROJECT
 
+[![Build and Test](https://github.com/koranke/SwapiService/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/koranke/SwapiService/actions/workflows/test.yml) [![CodeQL](https://github.com/koranke/SwapiService/actions/workflows/github-code-scanning/codeql/badge.svg?branch=master)](https://github.com/koranke/SwapiService/actions/workflows/github-code-scanning/codeql)
+
 ## How to run
 1. Project requires Maven 3.x and java 17.  If you use IntelliJ, it includes Maven and can auto-download Java for you.
 2. If using IntelliJ, you can directly run tests from the test classes.  See the classes under src/test/.
